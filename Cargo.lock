@@ -452,12 +452,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ascii_utils"
-version = "0.9.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "71938f30533e4d95a6d17aa530939da3842c2ab6f4f84b9dae68447e4129f74a"
-
-[[package]]
 name = "assert-json-diff"
 version = "2.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -547,11 +541,9 @@ dependencies = [
  "async-trait",
  "base64 0.22.1",
  "bytes",
- "fast_chemail",
  "fnv",
  "futures-timer",
  "futures-util",
- "handlebars",
  "http 1.1.0",
  "indexmap 2.5.0",
  "mime",
@@ -564,8 +556,25 @@ dependencies = [
  "serde_json",
  "serde_urlencoded",
  "static_assertions_next",
- "tempfile",
  "thiserror",
+]
+
+[[package]]
+name = "async-graphql-axum"
+version = "7.0.9"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "329afc4fc7359f112b7593bc930b788544cedbc97c4fbdf1db21e58704b4b5d0"
+dependencies = [
+ "async-graphql",
+ "async-trait",
+ "axum 0.7.5",
+ "bytes",
+ "futures-util",
+ "serde_json",
+ "tokio",
+ "tokio-stream",
+ "tokio-util",
+ "tower-service",
 ]
 
 [[package]]
@@ -2028,15 +2037,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "fast_chemail"
-version = "0.9.6"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "495a39d30d624c2caabe6312bfead73e7717692b44e0b32df168c275a2e8e9e4"
-dependencies = [
- "ascii_utils",
-]
-
-[[package]]
 name = "fastrand"
 version = "2.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2508,20 +2508,6 @@ checksum = "6dd08c532ae367adf81c312a4580bc67f1d0fe8bc9c460520283f4c0ff277888"
 dependencies = [
  "cfg-if",
  "crunchy",
-]
-
-[[package]]
-name = "handlebars"
-version = "5.1.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d08485b96a0e6393e9e4d1b8d48cf74ad6c063cd905eb33f42c1ce3f0377539b"
-dependencies = [
- "log",
- "pest",
- "pest_derive",
- "serde",
- "serde_json",
- "thiserror",
 ]
 
 [[package]]
@@ -4029,40 +4015,6 @@ dependencies = [
  "memchr",
  "thiserror",
  "ucd-trie",
-]
-
-[[package]]
-name = "pest_derive"
-version = "2.7.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "2a548d2beca6773b1c244554d36fcf8548a8a58e74156968211567250e48e49a"
-dependencies = [
- "pest",
- "pest_generator",
-]
-
-[[package]]
-name = "pest_generator"
-version = "2.7.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3c93a82e8d145725dcbaf44e5ea887c8a869efdcc28706df2d08c69e17077183"
-dependencies = [
- "pest",
- "pest_meta",
- "proc-macro2",
- "quote",
- "syn 2.0.77",
-]
-
-[[package]]
-name = "pest_meta"
-version = "2.7.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a941429fea7e08bedec25e4f6785b6ffaacc6b755da98df5ef3e7dcf4a124c4f"
-dependencies = [
- "once_cell",
- "pest",
- "sha2",
 ]
 
 [[package]]
@@ -5989,6 +5941,7 @@ dependencies = [
  "argon2",
  "assert_fs",
  "async-graphql",
+ "async-graphql-axum",
  "axum 0.7.5",
  "axum-extra",
  "axum-server",
@@ -6031,7 +5984,6 @@ dependencies = [
  "serde_json",
  "serial_test",
  "surrealdb",
- "surrealdb-async-graphql-axum",
  "surrealdb-core",
  "temp-env",
  "tempfile",
@@ -6144,24 +6096,6 @@ dependencies = [
  "wasmtimer",
  "wiremock",
  "ws_stream_wasm",
-]
-
-[[package]]
-name = "surrealdb-async-graphql-axum"
-version = "7.0.7-surrealdb.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6761517bf15e976c363d9d71ddf7f215e545a8ed787dba52d77b42732cf1a3da"
-dependencies = [
- "async-graphql",
- "async-trait",
- "axum 0.7.5",
- "bytes",
- "futures-util",
- "serde_json",
- "tokio",
- "tokio-stream",
- "tokio-util",
- "tower-service",
 ]
 
 [[package]]

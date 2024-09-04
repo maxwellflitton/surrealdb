@@ -107,15 +107,9 @@ where
 
 				let stream = Executor::execute_stream(&executor, req.0, None);
 				let body = Body::from_stream(
-					create_multipart_mixed_stream(
-						stream,
-						tokio_stream::wrappers::IntervalStream::new(tokio::time::interval(
-							Duration::from_secs(30),
-						))
-						.map(|_| ()),
-					)
-					.map(Ok::<_, std::io::Error>),
-				);
+					create_multipart_mixed_stream(stream, Duration::from_secs(30))
+						.map(Ok::<_, std::io::Error>),
+			);
 				Ok(HttpResponse::builder()
 					.header("content-type", "multipart/mixed; boundary=graphql")
 					.body(body)
