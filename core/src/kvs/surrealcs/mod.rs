@@ -69,7 +69,10 @@ impl Drop for Transaction {
 impl Datastore {
 	/// Open a new database
 	pub(crate) async fn new(path: &str) -> Result<Datastore, Error> {
-		create_connection_pool(path, None).await.unwrap();
+		match create_connection_pool(path, None).await.unwrap() {
+			Ok(_) => {}
+			Err(_) => return Err(Error::Ds("Failed to create CS connection pool".to_string())),
+		}
 		Ok(Datastore {})
 	}
 

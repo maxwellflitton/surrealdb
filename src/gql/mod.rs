@@ -91,7 +91,6 @@ where
 					return Ok(to_rejection(e).into_response());
 				}
 			};
-
 			let is_accept_multipart_mixed = req
 				.headers()
 				.get("accept")
@@ -104,12 +103,11 @@ where
 					Ok(req) => req,
 					Err(err) => return Ok(err.into_response()),
 				};
-
 				let stream = Executor::execute_stream(&executor, req.0, None);
 				let body = Body::from_stream(
 					create_multipart_mixed_stream(stream, Duration::from_secs(30))
 						.map(Ok::<_, std::io::Error>),
-			);
+				);
 				Ok(HttpResponse::builder()
 					.header("content-type", "multipart/mixed; boundary=graphql")
 					.body(body)
