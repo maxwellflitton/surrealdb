@@ -3,6 +3,7 @@ use crate::{
 	syn::parser::mac::test_parse,
 };
 
+mod json;
 mod limit;
 mod stmt;
 mod streaming;
@@ -47,6 +48,16 @@ fn glued_identifiers() {
 }
 
 #[test]
+fn less_then_idiom() {
+	let src = r#"
+		if ($param.foo < 2){
+			return 1
+		}
+	"#;
+	test_parse!(parse_query, src).unwrap();
+}
+
+#[test]
 fn escaped_params() {
 	let src = r#"LET $⟨R-_fYU8Wa31kg7tz0JI6Kme⟩ = 5;
 		RETURN  $⟨R-_fYU8Wa31kg7tz0JI6Kme⟩"#;
@@ -56,6 +67,20 @@ fn escaped_params() {
 	}
 
 	test_parse!(parse_query, src).unwrap();
+}
+
+#[test]
+fn missed_qoute_caused_panic() {
+	let src = r#"{"id:0,"method":"query","params"["SLEEP 30s"]}"#;
+
+	test_parse!(parse_query, src).unwrap_err();
+}
+
+#[test]
+fn query_object() {
+	let src = r#"{"id":0,"method":"query","params":["SLEEP 30s"]}"#;
+
+	test_parse!(parse_query, src).inspect_err(|e| eprintln!("{}", e.render_on(src))).unwrap();
 }
 
 #[test]
