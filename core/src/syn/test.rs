@@ -69,7 +69,7 @@ impl Parse<Self> for Expression {
 		let mut parser = Parser::new(val.as_bytes());
 		let mut stack = Stack::new();
 		let value = stack
-			.enter(|ctx| parser.parse_value_table(ctx))
+			.enter(|ctx| parser.parse_value_field(ctx))
 			.finish()
 			.map_err(|e| e.render_on(val))
 			.unwrap();
@@ -87,4 +87,15 @@ select * from person
 CREATE person CONTENT { foo:'bar'};
 "#;
 	parse(q).unwrap_err();
+}
+
+#[test]
+fn test_excessive_size() {
+	let mut q = String::new();
+	q.reserve_exact(u32::MAX as usize + 40);
+	for _ in 0..u32::MAX {
+		q.push(' ');
+	}
+	q.push_str("RETURN 1;");
+	parse(&q).unwrap_err();
 }
