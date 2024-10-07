@@ -10,6 +10,9 @@ use crate::{
 	telemetry,
 };
 
+#[cfg(feature = "storage-surrealcs")]
+use surrealdb_core::surrealcs::connection::state::close_state_connection_pool;
+
 /// Start a graceful shutdown:
 /// * Signal the Axum Handle when a shutdown signal is received.
 /// * Stop all WebSocket connections.
@@ -38,12 +41,18 @@ pub fn graceful_shutdown(
 				}
 
 				rpc::graceful_shutdown(state_clone).await;
-
 				ct.cancel();
 
 				// Flush all telemetry data
 				if let Err(err) = telemetry::shutdown() {
 					error!("Failed to flush telemetry data: {}", err);
+				}
+				#[cfg(feature = "storage-surrealcs")]
+				match close_state_connection_pool().await {
+					Ok(_) => tracing::info!("surrealcs connection pool shutdown"),
+					Err(e) => {
+						tracing::info!("error shutting down surrealcs connection pool: {}", e.to_string())
+					}
 				}
 			})
 		};
@@ -64,9 +73,15 @@ pub fn graceful_shutdown(
 
 				// Close all WebSocket connections immediately
 				rpc::shutdown(state);
-
 				// Cancel cancellation token
 				ct.cancel();
+				#[cfg(feature = "storage-surrealcs")]
+				match close_state_connection_pool().await {
+					Ok(_) => tracing::info!("surrealcs connection pool shutdown"),
+					Err(e) => {
+						tracing::info!("error shutting down surrealcs connection pool: {}", e.to_string())
+					}
+				}
 			} => (),
 		}
 	})

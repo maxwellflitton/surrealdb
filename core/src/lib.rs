@@ -51,6 +51,13 @@ pub use surrealml as ml;
 #[doc(hidden)]
 pub mod obs;
 
+#[cfg(feature = "kv-surrealcs")]
+pub use surrealcs as surrealcs;
+// {
+// 	pub mod surrealcs::connection,
+// 	pub mod surrealcs::kernel
+// }
+
 #[doc(hidden)]
 pub mod test_helpers {
 	pub use crate::vs::conv::to_u128_be;
